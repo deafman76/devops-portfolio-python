@@ -1,0 +1,15 @@
+.git
+.gitignore
+.venv
+__pycache__
+*.pyc
+.pytest_cache
+.coverage
+.env
+.env.local
+node_modules
+.DS_Store
+.vscode
+.idea
+*.md
+tests/
