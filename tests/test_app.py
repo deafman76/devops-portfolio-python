@@ -8,7 +8,6 @@
 Не полное покрытие, а скорее smoke-тесты.
 """
 
-import pytest
 from fastapi.testclient import TestClient
 
 # Импортируем приложение

@@ -8,9 +8,10 @@ FastAPI приложение для Фазы 1.
 Конфиг читается из переменных окружения (OS env vars).
 """
 
-import logging
 import json
+import logging
 import os
+
 from fastapi import FastAPI, HTTPException
 
 # ============================================================================
