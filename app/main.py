@@ -29,8 +29,10 @@ LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
 # Настроим логирование так, чтобы каждая строка была валидный JSON.
 # Это нужно для парсинга логов в Kubernetes и в ELK-стеке на Фазе 4.
 
+
 class JSONFormatter(logging.Formatter):
     """Форматирует логи в JSON."""
+
     def format(self, record):
         log_data = {
             "timestamp": self.formatTime(record),
@@ -68,11 +70,12 @@ app_is_ready = True
 # ЭНДПОИНТЫ
 # ============================================================================
 
+
 @app.get("/")
 def root():
     """
     Корневой эндпоинт. Возвращает информацию о приложении.
-    
+
     Это содержательный эндпоинт, который что-то делает.
     На Фазе 2 здесь будет логика работы с DynamoDB.
     """
@@ -89,7 +92,7 @@ def root():
 def health():
     """
     Liveness probe для Kubernetes.
-    
+
     Возвращает 200, если приложение живо (даже если не готово к работе).
     На Фазе 3 это будет использовано kubelet'ом для перезагрузки подов.
     """
@@ -101,14 +104,14 @@ def health():
 def ready():
     """
     Readiness probe для Kubernetes.
-    
+
     Возвращает 200, только если приложение готово к работе.
     На Фазе 3 это будет использовано для маршрутизации трафика.
     """
     if not app_is_ready:
         logger.warning("GET /readyz called but app not ready")
         raise HTTPException(status_code=503, detail="Service not ready")
-    
+
     logger.debug("GET /readyz called")
     return {"status": "ready"}
 
@@ -117,10 +120,10 @@ def ready():
 def set_ready_state(state: bool):
     """
     Утилита для тестирования readiness probe.
-    
+
     Позволяет искусственно переключить состояние приложения.
-    
-    Используется в тестах: 
+
+    Используется в тестах:
     - POST /set-ready/false → приложение "сломалось"
     - POST /set-ready/true → приложение "восстановилось"
     """
@@ -134,6 +137,7 @@ def set_ready_state(state: bool):
 # MIDDLEWARE: логирование запросов
 # ============================================================================
 
+
 @app.middleware("http")
 async def log_requests(request, call_next):
     """
@@ -141,13 +145,13 @@ async def log_requests(request, call_next):
     """
     method = request.method
     path = request.url.path
-    
+
     logger.info(f"Request started: {method} {path}")
-    
+
     response = await call_next(request)
-    
+
     logger.info(f"Request completed: {method} {path} {response.status_code}")
-    
+
     return response
 
 
@@ -157,7 +161,7 @@ async def log_requests(request, call_next):
 
 if __name__ == "__main__":
     import uvicorn
-    
+
     # Локальный запуск с hot-reload
     # Используется для разработки, не для production
     uvicorn.run(
