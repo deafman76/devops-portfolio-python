@@ -53,7 +53,7 @@ WORKDIR /app
 
 # Копируем только код приложения (не .git, не тесты в образ)
 COPY app/ /app/app/
-COPY src/ /app/src/
+# COPY src/ /app/src/
 
 # Создаём непривилегированного пользователя (security best practice)
 # Никогда не запускайте приложение от root в контейнере!
